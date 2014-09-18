@@ -129,6 +129,15 @@ class Post:
         del post_data['date']
         del post_data['permalink']
 
+        old_data = self.get_post_by_id(post_id)
+        if post_data['delete_file'] is None and post_data['episode'] == '':
+            post_data['episode'] = old_data['data'].get('episode', '')
+        elif post_data['delete_file'] == 'audio':
+            post_episode =  "%s/%s" % (self.upload_folder, old_data['data']['episode'])
+            if os.path.exists(post_episode):
+                os.unlink(post_episode)
+        del post_data['delete_file']
+
         try:
             self.collection.update(
                 {'_id': ObjectId(post_id)}, {"$set": post_data}, upsert=False)

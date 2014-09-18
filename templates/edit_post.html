@@ -2,17 +2,12 @@
 {%- block body -%}
 	{% if session.get('post-preview', None) %}
 		{% set post_title = session['post-preview'].get('title', None) %}
-		{% set post_preview = session['post-preview'].get('preview', None) %}
+		{% set post_episode = session['post-preview'].get('episode', None) %}
 		{% set post_body = session['post-preview'].get('body', None) %}
-		{% set tags = session['post-preview'].get('tags', None) %}
-		{% if tags %}
-			{% set post_tags = ','.join(tags) %}
-		{% endif %}
 	{% else %}
 		{% set post_title = post.get('title') %}
-		{% set post_preview = post.get('preview') %}
+		{% set post_episode = post.get('episode') %}
 		{% set post_body = post.get('body') %}
-		{% set post_tags = post.get('tags') %}
 	{% endif %}
 	<div class="post clearfix">
 		<div class="row">
@@ -43,12 +38,19 @@
 							{%- endif -%}
 						    <textarea id="post-full" name="post-full" class="form-control mdm-input" rows="6" placeholder="Full Text" required>{{ post_body | safe }}</textarea>
 					    </div>
+					    {%- if post_episode -%}
+						<div class="form-group {% if error and error_type == 'validate' %} has-error{% endif %}">
+							Zakačen audio: {{ post_episode }}<br>
+							<input id="brisi-check" type="checkbox" name="obrisi" value="audio"> <label for="brisi-check">Obriši audio?</label>
+					    </div>
+						{%- else -%}
 						<div class="form-group {% if error and error_type == 'validate' %} has-error{% endif %}">
 							{%- if error and error_type == 'validate' -%}
 								<label class="control-label" for="file">Required field</label>
 							{%- endif -%}
 							<input type="file" name="episode" id="file">
 					    </div>
+					    {%- endif -%}
 						<div class="form-group">
 							<input type="hidden" name="post-preview" id="preview">
 							<input type="hidden" name="post-id" value="{{ post['_id'] }}">

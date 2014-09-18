@@ -87,6 +87,7 @@ def new_post():
         post_title = request.form.get('post-title').strip()
         post_full = request.form.get('post-full')
         post_file = request.files.get('episode', None)
+        post_delete_file = request.form.get('obrisi', None)
 
         if not post_title or not post_full:
             error = True
@@ -99,7 +100,8 @@ def new_post():
             post_data = {'title': post_title,
                          'body': post_full,
                          'author': session['user']['username'],
-                         'episode': filename}
+                         'episode': filename,
+                         'delete_file': post_delete_file}
 
             post = postClass.validate_post_data(post_data)
             if request.form.get('post-preview') == '1':

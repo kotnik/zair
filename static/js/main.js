@@ -20,7 +20,7 @@ $(function(){
         var postForm = $('#post-form');
         postForm.find('#preview').val('');
     });
-    $('a.icon').on('click', function(){
+    $('a.delete-action').on('click', function(){
         return confirm('Are you sure?');
     });
 });
