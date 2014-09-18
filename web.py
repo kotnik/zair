@@ -1,11 +1,11 @@
-import cgi
 import os
-from flask import Flask, render_template, abort, url_for, request, flash, session, redirect
+from flask import Flask, render_template, abort, url_for, request, flash, session, redirect, send_from_directory
 from flaskext.markdown import Markdown
 from mdx_github_gists import GitHubGistExtension
 from mdx_strike import StrikeExtension
 from mdx_quote import QuoteExtension
 from werkzeug.contrib.atom import AtomFeed
+from werkzeug.utils import secure_filename
 import post
 import user
 import pagination
@@ -86,17 +86,20 @@ def new_post():
     if request.method == 'POST':
         post_title = request.form.get('post-title').strip()
         post_full = request.form.get('post-full')
+        post_file = request.files.get('episode', None)
 
         if not post_title or not post_full:
             error = True
         else:
-            tags = cgi.escape(request.form.get('post-tags'))
-            tags_array = extract_tags(tags)
+            filename = ""
+            if post_file and allowed_file(post_file.filename, app.config['ALLOWED_EXTENSIONS']):
+                filename = secure_filename(post_file.filename)
+                post_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
             post_data = {'title': post_title,
-                         'preview': request.form.get('post-short'),
                          'body': post_full,
-                         'tags': tags_array,
-                         'author': session['user']['username']}
+                         'author': session['user']['username'],
+                         'episode': filename}
 
             post = postClass.validate_post_data(post_data)
             if request.form.get('post-preview') == '1':
@@ -405,6 +408,11 @@ def install():
                            meta_title='Install')
 
 
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
+
 @app.before_request
 def csrf_protect():
     if request.method == "POST":
@@ -429,7 +437,7 @@ def page_not_found(error):
 
 
 @app.template_filter('formatdate')
-def format_datetime_filter(input_value, format_="%a, %d %b %Y"):
+def format_datetime_filter(input_value, format_="%d/%m/%Y"):
     return input_value.strftime(format_)
 
 

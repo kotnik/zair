@@ -49,3 +49,8 @@ def login_required():
             return f(*args, **kwargs)
         return wrapped
     return wrapper
+
+
+def allowed_file(filename, extensions):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in extensions

@@ -1,3 +1,4 @@
+import os
 import datetime
 import cgi
 from bson.objectid import ObjectId
@@ -10,6 +11,7 @@ class Post:
         self.collection = default_config['POSTS_COLLECTION']
         self.response = {'error': None, 'data': None}
         self.debug_mode = default_config['DEBUG']
+        self.upload_folder = default_config['UPLOAD_FOLDER']
 
     def get_posts(self, limit, skip, tag=None, search=None):
         self.response['error'] = None
@@ -38,6 +40,7 @@ class Post:
                                               'body': post['body'],
                                               'preview': post['preview'],
                                               'date': post['date'],
+                                              'episode': post['episode'],
                                               'permalink': post['permalink'],
                                               'tags': post['tags'],
                                               'author': post['author'],
@@ -138,8 +141,14 @@ class Post:
 
     def delete_post(self, post_id):
         self.response['error'] = None
+
         try:
-            if self.get_post_by_id(post_id) and self.collection.remove({'_id': ObjectId(post_id)}):
+            post = self.get_post_by_id(post_id)
+            print post
+            if post and self.collection.remove({'_id': ObjectId(post_id)}):
+                post_episode =  "%s/%s" % (self.upload_folder, post['data']['episode'])
+                if post['data']['episode'] and os.path.exists(post_episode):
+                    os.unlink(post_episode)
                 self.response['data'] = True
             else:
                 self.response['data'] = False
@@ -158,7 +167,6 @@ class Post:
         #permalink = exp.sub('', temp_title)
 
         post_data['title'] = cgi.escape(post_data['title'])
-        post_data['preview'] = cgi.escape(post_data['preview'], quote=True)
         post_data['body'] = cgi.escape(post_data['body'], quote=True)
         post_data['date'] = datetime.datetime.utcnow()
         post_data['permalink'] = permalink
@@ -169,7 +177,6 @@ class Post:
     def print_debug_info(msg, show=False):
         if show:
             import sys
-            import os
 
             error_color = '\033[32m'
             error_end = '\033[0m'

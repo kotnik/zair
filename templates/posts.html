@@ -5,7 +5,7 @@
 			<div class="col-lg-12">
 				{%- if posts -%}
 					<div class="page-header">
-						<h1>Posts</h1>
+						<h1>Epizode</h1>
 					</div>
 					<div class="content">
 						{%- with messages = get_flashed_messages(with_categories=True) -%}
@@ -20,8 +20,8 @@
 						<a href="{{ url_for('new_post') }}" class="response btn btn-primary">Add new</a>
 						<table class="table table-striped">
 							<tr>
-								<th>Title</th>
-								<th>Post Date</th>
+								<th>Naslov</th>
+								<th>Datum</th>
 								<th>Action</th>
 							</tr>
 							{%- for post in posts -%}

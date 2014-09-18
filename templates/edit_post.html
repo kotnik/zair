@@ -30,25 +30,24 @@
 							{%- endfor -%}
 						{%- endif -%}
 					{%- endwith -%}
-					<form id="post-form" role="form" method="post" action="{{ url_for('new_post') }}">
+					<form id="post-form" role="form" method="post" enctype="multipart/form-data" action="{{ url_for('new_post') }}">
 						<div class="form-group {% if error and error_type == 'validate' %}has-error{% endif %}">
 							{%- if error and error_type == 'validate' -%}
 								<label class="control-label" for="post-title">Required field</label>
 							{%- endif -%}
 						    <input type="text" class="form-control" name="post-title" id="post-title" placeholder="Post Title" required value="{{ post_title | safe }}">
 					    </div>
-						<div class="form-group">
-						    <textarea id="post-short" name="post-short" class="form-control" rows="3" placeholder="Short Text">{{ post_preview | safe }}</textarea>
-					    </div>
 						<div class="form-group {% if error and error_type == 'validate' %}has-error{% endif %}">
 							{%- if error and error_type == 'validate' -%}
 								<label class="control-label" for="post-full">Required field</label>
 							{%- endif -%}
-						    <textarea id="post-full" name="post-full" class="form-control" rows="6" placeholder="Full Text" required>{{ post_body | safe }}</textarea>
+						    <textarea id="post-full" name="post-full" class="form-control mdm-input" rows="6" placeholder="Full Text" required>{{ post_body | safe }}</textarea>
 					    </div>
-						<div class="form-group">
-						    <label for="post-tags">Tags</label>
-						    <input type="text" name="post-tags" class="form-control" id="post-tags" placeholder="Comma separated" value="{{ post_tags }}">
+						<div class="form-group {% if error and error_type == 'validate' %} has-error{% endif %}">
+							{%- if error and error_type == 'validate' -%}
+								<label class="control-label" for="file">Required field</label>
+							{%- endif -%}
+							<input type="file" name="episode" id="file">
 					    </div>
 						<div class="form-group">
 							<input type="hidden" name="post-preview" id="preview">

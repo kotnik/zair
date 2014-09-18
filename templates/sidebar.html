@@ -1,20 +1,35 @@
 {%- if recent_posts -%}
 <div class="col-lg-3 visible-lg sidebar">
-    <h2>Recent articles</h2>
+
+    <h4>O ZAIR-u</h4>
+    <hr>
+    <p>Jedna od, gle, manje zamornih radio emisija posvećenih tehno-komunikacijama ali i vašim reakcijama na hi-tech svet! ZAIR priprema i vodi ZORAN MODLI, a emituju odabrane FM stanice Srbije, kao i bliskog susedstva.
+    </p>
+
+    <h4>Na webu</h4>
     <hr>
     <ul>
-    {% for post in recent_posts %}
-        <li><a href="{{ url_for('single_post', permalink=post['permalink']) }}">{{ post['title'] | safe }}</a></li>
-    {% endfor %}
-    </ul>
-    {%- if tags -%}
-    <h2>Top tags</h2>
+        <li><a href="http://www.modli.rs">www.modli.rs</a></li>
+        <li><a href="http://www.iterfejs.tv">www.interfejs.tv</a></li>
+        <li><a href="http://itunes.apple.com">itunes.apple.com</a></li>
+        </ul>
+
+    <h4>Na radiju</h4>
     <hr>
     <ul>
-    {% for tag in tags %}
-        <li><a href="{{ url_for('posts_by_tag', page=1, tag=tag['title']) }}">{{ tag['title'] }} <sup class="badge">{{ tag['count'] }}</sup></a></li>
-    {% endfor %}
+        <li>Beograd 202</li>
+        <li>Studio B</li>
+        <li>OK radio</li>
+        <li>City radio</li>
+        <li>Radio Majdanpek</li>
+        <li>Radio Banat Link</li>
+        <li>Radio 019</li>
+        <li>Radio Kragujevac</li>
+        <li>Urban City</li>
+        <li>Radio Leskovac</li>
+        <li>BUM Radio</li>
+        <li>Radio Igokea</li>
     </ul>
-    {%- endif -%}
+
 </div>
 {%- endif -%}

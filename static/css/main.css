@@ -138,7 +138,11 @@ a.icon {
     padding-top:14.5px;
     padding-bottom:14.5px;
 }
-.navbar {min-height:53px;}
+.navbar {
+    min-height:53px;
+    background-color:#fff;
+    border-color:#fff;
+}
 
 legend {
     padding-top:20px;
@@ -160,4 +164,20 @@ input[type='checkbox'] {
 }
 @media only screen and (max-width: 767px) {
     .search-form {width:100%;}
+}
+
+.zairhead {
+    padding-top: 35px;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #000;
+}
+
+h4 {
+    margin-top: 21.5px;
+}
+
+.content>.audio, .content>.download {
+    margin-bottom: 10px;
 }

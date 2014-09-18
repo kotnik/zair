@@ -1,17 +1,21 @@
 import pymongo
 import os
 
-CONNECTION_STRING = "mongodb://localhost"  # replace it with your settings
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+CONNECTION_STRING = "mongodb://lab:27017"  # replace it with your settings
 CONNECTION = pymongo.MongoClient(CONNECTION_STRING)
 
 '''Leave this as is if you dont have other configuration'''
-DATABASE = CONNECTION.blog
+DATABASE = CONNECTION.flbl
 POSTS_COLLECTION = DATABASE.posts
 USERS_COLLECTION = DATABASE.users
 SETTINGS_COLLECTION = DATABASE.settings
 
+UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
+ALLOWED_EXTENSIONS = set(['mp3', 'png', 'jpg', 'jpeg', 'gif'])
+
 SECRET_KEY = ""
-basedir = os.path.abspath(os.path.dirname(__file__))
 secret_file = os.path.join(basedir, '.secret')
 if os.path.exists(secret_file):
     # Read SECRET_KEY from .secret file
