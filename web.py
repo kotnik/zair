@@ -88,6 +88,9 @@ def new_post():
         post_full = request.form.get('post-full')
         post_file = request.files.get('episode', None)
         post_delete_file = request.form.get('obrisi', None)
+        post_picture = request.files.get('picture', None)
+        post_pic_desc = request.form.get('pic-desc')
+        post_delete_pic = request.form.get('obrisi-sliku', None)
 
         if not post_title or not post_full:
             error = True
@@ -96,12 +99,21 @@ def new_post():
             if post_file and allowed_file(post_file.filename, app.config['ALLOWED_EXTENSIONS']):
                 filename = secure_filename(post_file.filename)
                 post_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            picname = ""
+            if post_picture and allowed_file(post_picture.filename, app.config['ALLOWED_EXTENSIONS']):
+                picname = secure_filename(post_picture.filename)
+                post_picture.save(os.path.join(app.config['UPLOAD_FOLDER'], picname))
 
-            post_data = {'title': post_title,
-                         'body': post_full,
-                         'author': session['user']['username'],
-                         'episode': filename,
-                         'delete_file': post_delete_file}
+            post_data = {
+                'title': post_title,
+                'body': post_full,
+                'author': session['user']['username'],
+                'episode': filename,
+                'picture': picname,
+                'pic_desc': post_pic_desc,
+                'delete_picture': post_delete_pic,
+                'delete_file': post_delete_file
+            }
 
             post = postClass.validate_post_data(post_data)
             if request.form.get('post-preview') == '1':
@@ -450,6 +462,7 @@ userClass = user.User(app.config)
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 app.jinja_env.globals['csrf_token'] = generate_csrf_token
 app.jinja_env.globals['meta_description'] = app.config['BLOG_DESCRIPTION']
+app.jinja_env.globals['upload_folder'] = app.config['UPLOAD_FOLDER']
 app.jinja_env.globals['recent_posts'] = postClass.get_posts(10, 0)['data']
 app.jinja_env.globals['tags'] = postClass.get_tags()['data']
 

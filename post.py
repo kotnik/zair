@@ -41,6 +41,8 @@ class Post:
                                               'preview': post['preview'],
                                               'date': post['date'],
                                               'episode': post['episode'],
+                                              'picture': post.get('picture', ''),
+                                              'pic_desc': post.get('pic_desc', ''),
                                               'permalink': post['permalink'],
                                               'tags': post['tags'],
                                               'author': post['author'],
@@ -137,6 +139,13 @@ class Post:
             if os.path.exists(post_episode):
                 os.unlink(post_episode)
         del post_data['delete_file']
+        if post_data['delete_picture'] is None and post_data['picture'] == '':
+            post_data['picture'] = old_data['data'].get('picture', '')
+        elif post_data['delete_picture'] == 'image':
+            post_picture =  "%s/%s" % (self.upload_folder, old_data['data']['picture'])
+            if os.path.exists(post_picture):
+                os.unlink(post_picture)
+        del post_data['delete_picture']
 
         try:
             self.collection.update(
@@ -170,13 +179,10 @@ class Post:
     @staticmethod
     def validate_post_data(post_data):
         permalink = random_string(12)
-        #exp = re.compile('\W')
-        #whitespace = re.compile('\s')
-        #temp_title = whitespace.sub("_", post_data['title'])
-        #permalink = exp.sub('', temp_title)
 
         post_data['title'] = cgi.escape(post_data['title'])
         post_data['body'] = cgi.escape(post_data['body'], quote=True)
+        post_data['pic_desc'] = cgi.escape(post_data['pic_desc'], quote=True)
         post_data['date'] = datetime.datetime.utcnow()
         post_data['permalink'] = permalink
 

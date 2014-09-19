@@ -4,19 +4,19 @@
 		{% set post_title = session['post-preview'].get('title', None) %}
 		{% set post_preview = session['post-preview'].get('preview', None) %}
 		{% set post_body = session['post-preview'].get('body', None) %}
-		{% set post_tags = session['post-preview'].get('tags', None) %}
+		{% set pic_desc = session['post-preview'].get('body', None) %}
 	{% else %}
 		{% set post_title = '' %}
 		{% set post_preview = '' %}
 		{% set post_body = '' %}
-		{% set post_tags = '' %}
+		{% set pic_desc = '' %}
 	{% endif %}
 
 	<div class="post clearfix">
 		<div class="row">
 			<div class="col-lg-8">
 				<div class="page-header">
-					<h1>New post</h1>
+					<h1>Nova epizoda</h1>
 				</div>
 				<div class="content">
 					{%- with messages = get_flashed_messages(with_categories=True) -%}
@@ -33,25 +33,33 @@
 							{%- if error and error_type == 'validate' -%}
 								<label class="control-label" for="post-title">Required field</label>
 							{%- endif -%}
-						    <input type="text" class="form-control" name="post-title" id="post-title" placeholder="Post Title" value="{{ post_title | safe }}" required>
+						    <input type="text" class="form-control" name="post-title" id="post-title" placeholder="Naslov epizode" value="{{ post_title | safe }}" required>
 					    </div>
 						<div class="form-group {% if error and error_type == 'validate' %} has-error{% endif %}">
 							{%- if error and error_type == 'validate' -%}
 								<label class="control-label" for="post-full">Required field</label>
 							{%- endif -%}
-						    <textarea id="post-full" name="post-full" class="form-control mdm-input" rows="6" placeholder="Full Text" required>{{ post_body | safe }}</textarea>
+						    <textarea id="post-full" name="post-full" class="form-control mdm-input" rows="12" placeholder="Tekst uz epizodu" required>{{ post_body | safe }}</textarea>
+					    </div>
+						<div class="form-group {% if error and error_type == 'validate' %} has-error{% endif %}">
+							<label for="file">Epizoda:</label>
+							<input type="file" name="episode" id="file">
+					    </div>
+						<div class="form-group {% if error and error_type == 'validate' %} has-error{% endif %}">
+							<label for="picture">Slika:</label>
+							<input type="file" name="picture" id="picture">
 					    </div>
 						<div class="form-group {% if error and error_type == 'validate' %} has-error{% endif %}">
 							{%- if error and error_type == 'validate' -%}
-								<label class="control-label" for="file">Required field</label>
+								<label class="control-label" for="post-full">Required field</label>
 							{%- endif -%}
-							<input type="file" name="episode" id="file">
+						    <textarea id="pic-desc" name="pic-desc" class="form-control mdm-input" rows="6" placeholder="Opis slike" required>{{ pic_desc | safe }}</textarea>
 					    </div>
 						<div class="form-group">
 							<input type="hidden" name="post-preview" id="preview">
 							<input name="_csrf_token" type="hidden" value="{{ csrf_token() }}">
-						    <input id="post-submit" type="submit" class="btn btn-primary" value="Submit">
-							<input id="post-preview" type="submit" class="btn" value="Preview">
+						    <input id="post-submit" type="submit" class="btn btn-primary" value="Snimi">
+							<input id="post-preview" type="submit" class="btn" value="Pregledaj">
 					    </div>
 					</form>
 				</div>

@@ -15,7 +15,7 @@
 											<h2><a href="{{ url_for('single_post', permalink=post['permalink']) }}">{{ post['title'] | safe }}</a></h2>
 											<p><span class="icon-time">&nbsp;</span><i>Postavio {{ post['author'] }} na {{ post['date'] |formatdate }}</i></p>
 										</div>
-										<div class="content no-lightbox">
+										<div class="content">
 											{%- if post['episode'] -%}
 											<div class="audio">
 												<audio src="/uploads/{{ post['episode'] }}" controls="controls" preload="none"></audio>
@@ -24,7 +24,27 @@
 												Preuzmite: <a href="/uploads/{{ post['episode'] }}">MP3 Audio</a>
 											</div>
 											{%- endif -%}
-											{{ post['body']|markdown }}
+											<div class="text-content">
+
+												{%- if post['picture'] -%}
+									            <div class="col-md-5 col-md-offset-5 pull-right" style="margin-left: 10px;">
+									                <div class="thumbnail">
+									                	<a href="/uploads/{{ post['picture'] }}" data-lightbox="epizode">
+									                    	<img width="270" src="/uploads/{{ post['picture'] }}" alt="Slika uz epizodu">
+									                    </a>
+									                    {%- if post['pic_desc'] -%}
+									                    <div class="caption">
+									                        <p class="image-caption">{{ post['pic_desc'] }}</p>
+									                    </div>
+									                    {%- endif -%}
+									                </div>
+									            </div>
+									            {%- endif -%}
+
+												{{ post['body']|markdown }}
+
+									        </div>
+
 										</div>
 									</div>
 								</div>
@@ -66,6 +86,7 @@
 		{%- block scripts -%}
 			<script src="//codeorigin.jquery.com/jquery-2.0.3.min.js"></script>
 			<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+			<script src="{{ url_for('static', filename='js/lightbox-2.6.min.js') }}"></script>
 			{%- block additional_js -%}{%- endblock -%}
 			<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 		{%- endblock -%}
