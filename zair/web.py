@@ -1,25 +1,36 @@
 import os
 from flask import Flask, render_template, abort, url_for, request, flash, session, redirect, send_from_directory
+
 from flaskext.markdown import Markdown
-from mdx_github_gists import GitHubGistExtension
-from mdx_strike import StrikeExtension
-from mdx_quote import QuoteExtension
+
+from md.mdx_github_gists import GitHubGistExtension
+from md.mdx_strike import StrikeExtension
+from md.mdx_quote import QuoteExtension
 from werkzeug.contrib.atom import AtomFeed
 from werkzeug.utils import secure_filename
 import post
 import user
 import pagination
 import settings
+
 from helper_functions import *
+from flask_app import app
 
-
-app = Flask('FlaskBlog')
 md = Markdown(app)
 md.register_extension(GitHubGistExtension)
 md.register_extension(StrikeExtension)
 md.register_extension(QuoteExtension)
-app.config.from_object('config')
 
+settingsClass = settings.Settings(app.config)
+postClass = post.Post(app.config)
+#userClass = user.User(app.config)
+
+app.jinja_env.globals['url_for_other_page'] = url_for_other_page
+app.jinja_env.globals['csrf_token'] = generate_csrf_token
+app.jinja_env.globals['meta_description'] = app.config['BLOG_DESCRIPTION']
+app.jinja_env.globals['upload_folder'] = app.config['UPLOAD_FOLDER']
+app.jinja_env.globals['recent_posts'] = postClass.get_posts(10, 0)['data']
+app.jinja_env.globals['tags'] = postClass.get_tags()['data']
 
 @app.route('/', defaults={'page': 1})
 @app.route('/page-<int:page>')
@@ -453,26 +464,3 @@ def page_not_found(error):
 @app.template_filter('formatdate')
 def format_datetime_filter(input_value, format_="%d/%m/%Y"):
     return input_value.strftime(format_)
-
-
-settingsClass = settings.Settings(app.config)
-postClass = post.Post(app.config)
-userClass = user.User(app.config)
-
-app.jinja_env.globals['url_for_other_page'] = url_for_other_page
-app.jinja_env.globals['csrf_token'] = generate_csrf_token
-app.jinja_env.globals['meta_description'] = app.config['BLOG_DESCRIPTION']
-app.jinja_env.globals['upload_folder'] = app.config['UPLOAD_FOLDER']
-app.jinja_env.globals['recent_posts'] = postClass.get_posts(10, 0)['data']
-app.jinja_env.globals['tags'] = postClass.get_tags()['data']
-
-if not app.config['DEBUG']:
-    import logging
-    from logging import FileHandler
-    file_handler = FileHandler(app.config['LOG_FILE'])
-    file_handler.setLevel(logging.WARNING)
-    app.logger.addHandler(file_handler)
-
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)),
-            debug=app.config['DEBUG'])
