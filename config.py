@@ -3,7 +3,7 @@ import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-CONNECTION_STRING = "mongodb://lab:27017"  # replace it with your settings
+CONNECTION_STRING = "mongodb://localhost:27017"  # replace it with your settings
 CONNECTION = pymongo.MongoClient(CONNECTION_STRING)
 
 '''Leave this as is if you dont have other configuration'''
