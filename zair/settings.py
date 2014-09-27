@@ -59,12 +59,16 @@ class Settings:
                 [('query', 1), ('orderby', 1)])
             self.config['USERS_COLLECTION'].ensure_index([('date', 1)])
 
-            post_data = {'title': 'Hello World!',
-                         'preview': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod',
-                         'body': 'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
-                         'tags': [],
-                         'author': user_data['_id'],
-                         'pic_desc': ''}
+            post_data = {
+                'title': 'Hello World!',
+                'preview': '',
+                'body': 'Tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
+                'tags': [],
+                'author': user_data['_id'],
+                'pic_desc': '',
+                'picture': '',
+                'episode': ''
+                }
             post = postClass.validate_post_data(post_data)
 
             user_create = userClass.save_user(user_data)
