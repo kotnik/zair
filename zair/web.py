@@ -23,7 +23,7 @@ md.register_extension(QuoteExtension)
 
 settingsClass = settings.Settings(app.config)
 postClass = post.Post(app.config)
-#userClass = user.User(app.config)
+userClass = user.User(app.config)
 
 app.jinja_env.globals['url_for_other_page'] = url_for_other_page
 app.jinja_env.globals['csrf_token'] = generate_csrf_token
