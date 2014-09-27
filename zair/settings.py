@@ -63,7 +63,8 @@ class Settings:
                          'preview': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod',
                          'body': 'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
                          'tags': [],
-                         'author': user_data['_id']}
+                         'author': user_data['_id'],
+                         'pic_desc': ''}
             post = postClass.validate_post_data(post_data)
 
             user_create = userClass.save_user(user_data)
@@ -83,10 +84,11 @@ class Settings:
                 self.config['POSTS_COLLECTION'].drop()
                 self.config['USERS_COLLECTION'].drop()
                 self.collection.drop()
-            return self.response
         except Exception, e:
             self.print_debug_info(e, self.debug_mode)
             self.response['error'] = 'Installation error..'
+
+        return self.response
 
     def update_settings(self, data):
         self.response['error'] = None
