@@ -1,6 +1,5 @@
-.secret
+*~
 *.py[co]
-.secret
 uploads/*.mp3
 uploads/*.jpg
 uploads/*.png
